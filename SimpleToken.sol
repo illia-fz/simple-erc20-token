@@ -25,6 +25,25 @@ contract SimpleToken {
         return true;
     }
 
+    // Add Pausable and Burnable features
+    bool public paused = false;
+
+    function pause() public {
+        paused = true;
+    }
+
+    function unpause() public {
+        paused = false;
+    }
+
+    function burn(uint256 _value) public returns (bool) {
+        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
+        balanceOf[msg.sender] -= _value;
+        totalSupply -= _value;
+        emit Transfer(msg.sender, address(0), _value);
+        return true;
+    }
+
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
